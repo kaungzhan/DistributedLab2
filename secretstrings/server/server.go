@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"math/rand"
 	"net"
 	"net/rpc"
@@ -43,7 +44,10 @@ func main() {
 	flag.Parse()
 	rand.Seed(time.Now().UnixNano())
 	rpc.Register(&SecretStringOperations{})
-	listener, _ := net.Listen("tcp", *ptrAddr)
+	listener, e := net.Listen("tcp", *ptrAddr)
+	if e != nil {
+		fmt.Println(e)
+	}
 	defer listener.Close()
 	rpc.Accept(listener)
 }
